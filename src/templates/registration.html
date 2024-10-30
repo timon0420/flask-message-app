@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block head %}
+    <title>Registration</title>
+{% endblock %}
+{% block body %}
+    <form action="/registration" method="post">
+        {{ form.csrf_token }}
+        {{ form.name }}
+        {{ form.surname }}
+        {{ form.email }}
+        {{ form.password }}
+        {{ form.submit }}
+    </form>
+{% endblock %}
