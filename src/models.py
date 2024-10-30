@@ -9,9 +9,10 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String, nullable=False, unique=True)
     message = db.relationship("Message", backref="user")
 
-    def __init__(self, name, surname, password):
+    def __init__(self, name, surname, email, password):
         self.name = name
         self.surname = surname
+        self.email = email
         self.password = bcrypt.generate_password_hash(password)
 #poewinna być jeszcze encja asocjacyjan dla uczestnicwa user w group ponieważ jeden user może by w wielu group a jedna group może mieć wielu users
 class Group(db.Model):

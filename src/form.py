@@ -3,6 +3,7 @@ from wtforms import StringField, EmailField, PasswordField, SubmitField
 from wtforms.validators import Length, InputRequired, ValidationError
 from src import bcrypt
 from src.models import User
+import re
 
 class RegistrationForm(FlaskForm):
     name = StringField(validators=[InputRequired(), Length(
@@ -19,9 +20,37 @@ class RegistrationForm(FlaskForm):
     )], render_kw={"placeholder": "password"})
     submit = SubmitField("Register")
 
-    def validate_user(self, email, password):
-        existing_user = User.query.filter_by(email=email).first()
-        if existing_user and bcrypt.check_password_hash(existing_user.password, password):
-            raise ValidationError(
-                "That login is already exists. Pleace choose a diffrent one."
+    def validate_user(self):
+        email_pattern = "[\w]{5,40}@((gmail)|(interia)|(wp)|(onet)|(o2)){1}.((com)|(pl))"
+        name_surname_pattern = "[A-Z]{1}[a-zęążź]{4,19}"
+        password_pattern = "[\w\-._!@#$%^&*]{5,20}"
+        email_match = re.match(email_pattern, self.email.data)
+        name_match = re.match(name_surname_pattern, self.name.data)
+        surname_match = re.match(name_surname_pattern, self.surname.data)
+        password_match = re.match(password_pattern, self.password.data)
+        if not (email_match and name_match and surname_match and password_match):
+            raise ValidationError (
+                "ERROR"
             )
+        else:
+            existing_user = User.query.filter_by(email=self.email.data).first()
+            if existing_user and bcrypt.check_password_hash(existing_user.password, self.password.data):
+                raise ValidationError(
+                    "That login is already exists. Pleace choose a diffrent one."
+                )
+        
+
+    
+    # def validate_name_surname(self):
+    #     pattern = "^[A-Z]{1}[a-zęążź]{4,19}"
+    #     if not (re.match(pattern, self.name.data) and re.match(pattern, self.surname.data)):
+    #         raise ValidationError(
+    #             "Name or surname is incorrect"
+    #         )
+        
+    # def validate_password(self):
+    #     pattern = "[\w\-._!@#$%^&*]{5,20}"
+    #     if not re.match(pattern, self.password.data):
+    #         raise ValidationError(
+    #             "Password is incorrect"
+    #         )

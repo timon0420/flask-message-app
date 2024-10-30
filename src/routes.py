@@ -12,20 +12,23 @@ def home():
 def registration():
     form = RegistrationForm()
     if form.validate_on_submit():
+
+        try:
+            form.validate_user()
+        except Exception as e:
+            return str(e)
+        
         name = form.name.data
         surname = form.surname.data
         email = form.email.data
         password = form.password.data
+        
+        new_user = User(name=name, surname=surname, email=email, password=password)
 
         try:
-            form.validate_user(email, password)
-        except Exception as e:
-            return str(e)
-
-        try:
-            new_user = User(name=name, surname=surname, email=email, password=password)
             db.session.add(new_user)
             db.session.commit()
+            return redirect('/')
         except Exception as e:
             return str(e)
         
