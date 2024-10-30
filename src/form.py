@@ -39,18 +39,11 @@ class RegistrationForm(FlaskForm):
                     "That login is already exists. Pleace choose a diffrent one."
                 )
         
-
-    
-    # def validate_name_surname(self):
-    #     pattern = "^[A-Z]{1}[a-zęążź]{4,19}"
-    #     if not (re.match(pattern, self.name.data) and re.match(pattern, self.surname.data)):
-    #         raise ValidationError(
-    #             "Name or surname is incorrect"
-    #         )
-        
-    # def validate_password(self):
-    #     pattern = "[\w\-._!@#$%^&*]{5,20}"
-    #     if not re.match(pattern, self.password.data):
-    #         raise ValidationError(
-    #             "Password is incorrect"
-    #         )
+class LoginForm(FlaskForm):
+    email = EmailField(validators=[InputRequired(), Length(
+        min=10, max=50
+    )], render_kw={"placeholder": "email"})
+    password = PasswordField(validators=[InputRequired(), Length(
+        min=5, max=20
+    )], render_kw={"placeholder": "password"})
+    submit = SubmitField("Login")
