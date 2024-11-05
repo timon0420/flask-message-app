@@ -7,7 +7,7 @@
         {% for id in messages_id %}
             <li>
                 {{ Message.query.get(id).content }}
-                {{ Message.query.get(id).author }}
+                {{ User.query.get(Message.query.get(id).author).name }}
             </li>
         {% endfor %}
     </ul>

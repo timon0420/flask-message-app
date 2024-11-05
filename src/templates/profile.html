@@ -5,10 +5,16 @@
 {% block body %}
     <h1>Hello {{ user.name }}</h1>
     <form action="/profile" method="post">
-        {{ form.csrf_token }}
-        {{ form.group_name }}
-        {{ form.code }}
-        {{ form.submit }}
+        {{ formCreate.csrf_token }}
+        {{ formCreate.group_name }}
+        {{ formCreate.code }}
+        {{ formCreate.submit }}
+    </form>
+    <form action="/profile" method="post">
+        {{ formJoin.csrf_token }}
+        {{ formJoin.group_name }}
+        {{ formJoin.code }}
+        {{ formJoin.submit }}
     </form>
     <table>
         <thead>

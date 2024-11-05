@@ -7,7 +7,7 @@ import re
 
 class RegistrationForm(FlaskForm):
     name = StringField(validators=[InputRequired(), Length(
-        min=5, max=20
+        min=2, max=20
     )], render_kw={"placeholder": "name"})
     surname = StringField(validators=[InputRequired(), Length(
         min=5, max=20
@@ -56,6 +56,15 @@ class CreateGroupForm(FlaskForm):
         min=5, max=5
     )], render_kw={"placeholder": "Code"})
     submit = SubmitField("Create Group")
+
+class JoinGroupForm(FlaskForm):
+    group_name = StringField(validators=[InputRequired(), Length(
+        min=5, max=100
+    )], render_kw={"placeholder": "Group Name"})
+    code = StringField(validators=[InputRequired(), Length(
+        min=5, max=5
+    )], render_kw={"placeholder": "Code"})
+    submit = SubmitField("Join To Group")
 
 class MessageForm(FlaskForm):
     content = StringField(validators=[InputRequired()], render_kw={"placeholder": "Message"})
