@@ -3,4 +3,17 @@
     <title>Group</title>
 {% endblock %}
 {% block body %}
+    <ul>
+        {% for id in messages_id %}
+            <li>
+                {{ Message.query.get(id).content }}
+                {{ Message.query.get(id).author }}
+            </li>
+        {% endfor %}
+    </ul>
+    <form action="/group/{{ group_id }}", method="post">
+        {{ form.csrf_token }}
+        {{ form.content }}
+        {{ form.submit }}
+    </form>
 {% endblock %}

@@ -2,14 +2,13 @@ from src import app, db, bcrypt
 from flask import render_template, redirect
 from flask_login import current_user, login_required
 from src.models import Group_participants, Group, Message_in_group, Message
-from src.form import CreateGroupForm
+from src.form import CreateGroupForm, MessageForm
 
 @app.route('/profile', methods=['POST', 'GET'])
 @login_required
 def profile():
     form = CreateGroupForm()
-    groups = Group_participants.query.filter_by(user_id=current_user.id).all()
-    print(groups)
+
     if form.validate_on_submit():
 
         group_name = form.group_name.data
@@ -34,10 +33,32 @@ def profile():
         except Exception as e:
             return str(e)
         
+    groups = Group_participants.query.filter_by(user_id=current_user.id).all()
+
     return render_template('profile.html', user=current_user, form=form, groups=groups, Group=Group)
 
 @app.route('/group/<id>', methods=['GET', 'POST'])
 @login_required
 def group(id):
+    form = MessageForm()
+
+    if form.validate_on_submit():
+
+        content = form.content.data
+
+        new_message = Message(content=content, author=current_user.id)
+        try:
+            db.session.add(new_message)
+            db.session.commit()
+        except Exception as e:
+            return str(e)
+        
+        new_message_in_group = Message_in_group(group_id=id, message=new_message.id)
+        try:
+            db.session.add(new_message_in_group)
+            db.session.commit()
+        except Exception as e:
+            return str(e)
+
     messages_id = [message.message_id for message in Message_in_group.query.filter_by(group_id=id).all()]
-    return render_template('group.html')
+    return render_template('group.html', group_id=id, messages_id=messages_id, Message=Message)

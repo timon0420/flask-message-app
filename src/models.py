@@ -40,6 +40,10 @@ class Message_in_group(db.Model):
     group_id = db.Column(db.Integer, db.ForeignKey("group.id"))
     message_id = db.Column(db.Integer, db.ForeignKey("message.id"))
 
+    def __init__(self, group_id, message_id):
+        self.group_id = group_id
+        self.message_id = message_id
+
 class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.Text, nullable=False)

@@ -57,3 +57,7 @@ class CreateGroupForm(FlaskForm):
     )], render_kw={"placeholder": "Code"})
     submit = SubmitField("Create Group")
 
+class MessageForm(FlaskForm):
+    content = StringField(validators=[InputRequired()], render_kw={"placeholder": "Message"})
+    submit = SubmitField("Send")
+
