@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, EmailField, PasswordField, SubmitField
+from wtforms import StringField, IntegerField, EmailField, PasswordField, SubmitField
 from wtforms.validators import Length, InputRequired, ValidationError
 from src import bcrypt
 from src.models import User
@@ -47,3 +47,13 @@ class LoginForm(FlaskForm):
         min=5, max=20
     )], render_kw={"placeholder": "password"})
     submit = SubmitField("Login")
+
+class CreateGroupForm(FlaskForm):
+    group_name = StringField(validators=[InputRequired(), Length(
+        min=5, max=100
+    )], render_kw={"placeholder": "Group Name"})
+    code = StringField(validators=[InputRequired(), Length(
+        min=5, max=5
+    )], render_kw={"placeholder": "Code"})
+    submit = SubmitField("Create Group")
+

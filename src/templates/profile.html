@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block head %}
+    <title>Profile</title>
+{% endblock %}
+{% block body %}
+    <h1>Hello {{ user.name }}</h1>
+    <form action="/profile" method="post">
+        {{ form.csrf_token }}
+        {{ form.group_name }}
+        {{ form.code }}
+        {{ form.submit }}
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>Name of group</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for group in groups %}
+                <tr>
+                    <td>
+                        {{ Group.query.filter_by(id=group.group_id).first().group_name }}
+                    </td>
+                    <td>
+                        <a href="/group/{{ group.group_id }}">Open group</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -1,5 +1,5 @@
 from src import app, db, csrf, bcrypt
-from flask import render_template, redirect, request
+from flask import render_template, redirect
 from flask_login import current_user, login_required, login_user, logout_user
 from src.form import RegistrationForm, LoginForm
 from src.models import User
@@ -7,8 +7,9 @@ from src.models import User
 @app.route('/')
 @login_required
 def home():
-    print(current_user.name)
-    return "hello"
+    szymon = User.query.get(1)
+    login_user(szymon)
+    return "hello this is a simple messeng application"
 
 @app.route('/registration', methods=['POST', 'GET'])
 def registration():
@@ -48,5 +49,10 @@ def login():
         user = User.query.filter_by(email=email).first()
         if user and bcrypt.check_password_hash(user.password, password):
             login_user(user)
-            return redirect('/')
+            return redirect('/profile')
     return render_template('login.html', form=form)
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect('/login')
