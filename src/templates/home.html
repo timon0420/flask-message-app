@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block head %}
+    <title>Message App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/home.css' )}}" type="text/css">
+{% endblock %}
+{% block body %}
+    <section id="home">
+        <h1>Message application</h1>
+        <div id="informationBox">
+            <p>This is a simple message application. The main technology of the application is flask. Application enables sending messages to everyone who is in the group.</p>
+        </div>
+        <div id="linkContainer">
+            <a href="/login">Login</a>
+            <a href="/registration">Registration</a>
+        </div>
+    </section>
+{% endblock%}

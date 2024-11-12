@@ -6,21 +6,25 @@
     <h1>Hello {{ user.name }}</h1>
     <form action="/profile" method="post">
         {{ formCreate.csrf_token }}
+        {{ formCreate.identifier(hidden=True, value='FORMCREATE') }}
         {{ formCreate.group_name }}
         {{ formCreate.code }}
-        {{ formCreate.submit }}
+        {{ formCreate.submit_create }}
     </form>
     <form action="/profile" method="post">
         {{ formJoin.csrf_token }}
+        {{ formJoin.identifier(hidden=True, value='FORMJOIN') }}
         {{ formJoin.group_name }}
         {{ formJoin.code }}
-        {{ formJoin.submit }}
+        {{ formJoin.submit_join }}
     </form>
+    <p>Group Name: Pierwsza, Code: 11111</p>
+    <p>Group Name: Druga, Code 22222</p>
     <table>
         <thead>
             <tr>
                 <th>Name of group</th>
-                <th></th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>

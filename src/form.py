@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, EmailField, PasswordField, SubmitField
+from wtforms import StringField, IntegerField, EmailField, PasswordField, SubmitField, TextAreaField
 from wtforms.validators import Length, InputRequired, ValidationError
 from src import bcrypt
 from src.models import User
@@ -21,8 +21,8 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField("Register")
 
     def validate_user(self):
-        email_pattern = "[\w]{5,40}@((gmail)|(interia)|(wp)|(onet)|(o2)){1}.((com)|(pl))"
-        name_surname_pattern = "[A-Z]{1}[a-zęążź]{4,19}"
+        email_pattern = "[\w]{2,40}@((gmail)|(interia)|(wp)|(onet)|(o2)){1}.((com)|(pl))"
+        name_surname_pattern = "[A-Z]{1}[a-zęążź]{2,19}"
         password_pattern = "[\w\-._!@#$%^&*]{5,20}"
         email_match = re.match(email_pattern, self.email.data)
         name_match = re.match(name_surname_pattern, self.name.data)
@@ -48,25 +48,23 @@ class LoginForm(FlaskForm):
     )], render_kw={"placeholder": "password"})
     submit = SubmitField("Login")
 
-class CreateGroupForm(FlaskForm):
+class GroupForm(FlaskForm, object):
+    identifier = StringField()
     group_name = StringField(validators=[InputRequired(), Length(
         min=5, max=100
     )], render_kw={"placeholder": "Group Name"})
-    code = StringField(validators=[InputRequired(), Length(
+    code = PasswordField(validators=[InputRequired(), Length(
         min=5, max=5
     )], render_kw={"placeholder": "Code"})
-    submit = SubmitField("Create Group")
+    submit = SubmitField("Commit")
 
-class JoinGroupForm(FlaskForm):
-    group_name = StringField(validators=[InputRequired(), Length(
-        min=5, max=100
-    )], render_kw={"placeholder": "Group Name"})
-    code = StringField(validators=[InputRequired(), Length(
-        min=5, max=5
-    )], render_kw={"placeholder": "Code"})
-    submit = SubmitField("Join To Group")
+class CreateGroupForm(GroupForm):
+    submit_create = SubmitField("Create Group")
+
+class JoinGroupForm(GroupForm):
+    submit_join = SubmitField("Join To Group")
 
 class MessageForm(FlaskForm):
-    content = StringField(validators=[InputRequired()], render_kw={"placeholder": "Message"})
+    content = TextAreaField(validators=[InputRequired()])
     submit = SubmitField("Send")
 

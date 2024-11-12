@@ -1,0 +1,33 @@
+#home {
+    width: 80vw;
+    height: 80vh;
+    background-color: red;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: column;
+    border-radius: 50px;
+}
+#home h1 {
+
+}
+#home #informationBox {
+
+}
+#home #informationBox p {
+
+}
+#home #linkContainer {
+    display: flex;
+    gap: 50px;
+}
+#home #linkContainer a{
+    width: 150px;
+    height: 50px;
+    border-radius: 25px;
+    background-color: blue;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}

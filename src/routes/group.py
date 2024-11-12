@@ -2,14 +2,17 @@ from src import app, db, bcrypt
 from flask import render_template, redirect
 from flask_login import current_user, login_required
 from src.models import User, Group_participants, Group, Message_in_group, Message
-from src.form import CreateGroupForm, JoinGroupForm, MessageForm
+from src.form import CreateGroupForm, JoinGroupForm, MessageForm, GroupForm
 
 @app.route('/profile', methods=['POST', 'GET'])
 @login_required
 def profile():
     formCreate = CreateGroupForm()
     formJoin = JoinGroupForm()
-    if formCreate.validate_on_submit():
+    form = GroupForm()
+    print(form.validate_on_submit())
+
+    if formCreate.identifier.data == 'FORMCREATE' and form.validate_on_submit():
 
         group_name = formCreate.group_name.data
         code = formCreate.code.data
@@ -33,12 +36,15 @@ def profile():
         except Exception as e:
             return str(e)
         
-    elif formJoin.validate_on_submit():
-        
+    if formJoin.identifier.data == 'FORMJOIN' and form.validate_on_submit():
+
+        print("działa")
         group_name = formJoin.group_name.data
         code = formJoin.code.data
 
-        existing_group = Group.filter_by(group_name=group_name).all()
+        existing_group = Group.query.filter_by(group_name=group_name).all()
+
+        print(existing_group)
 
         for group in existing_group:
             if bcrypt.check_password_hash(group.code, code):
