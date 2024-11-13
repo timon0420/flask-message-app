@@ -4,6 +4,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/group.css') }}">
 {% endblock %}
 {% block body %}
+    <a href="/profile" id="backButton">back</a>
     <section id="group">
         {% if messages_id|length > 0 %}
             <ul>

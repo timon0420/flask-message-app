@@ -35,6 +35,9 @@
                     </td>
                     <td>
                         <a href="/group/{{ group.group_id }}">Open group</a>
+                        {% if Group.query.filter_by(id=group.group_id).first().admin == user.id %}
+                            <p>Group Options</p>
+                        {% endif %}
                     </td>
                 </tr>
             {% endfor %}
