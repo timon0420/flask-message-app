@@ -1,5 +1,5 @@
 from src import app, db, bcrypt
-from flask import render_template, redirect
+from flask import render_template, redirect, url_for
 from flask_login import current_user, login_required
 from src.models import User, Group_participants, Group, Message_in_group, Message
 from src.form import CreateGroupForm, JoinGroupForm, MessageForm, GroupForm
@@ -22,7 +22,7 @@ def profile():
             if bcrypt.check_password_hash(group.code, code):
                 return "Sorry Something went wrong. Please try again"
 
-        new_group = Group(group_name=group_name, code=code)
+        new_group = Group(group_name=group_name, code=code, admin=current_user.id)
         try:
             db.session.add(new_group)
             db.session.commit()

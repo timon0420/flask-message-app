@@ -1,0 +1,44 @@
+#group {
+    width: 80vw;
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+#group ul {
+    width: 80vw;
+    height: 75vh;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+    padding: 25px;
+    list-style: none;
+    overflow-y: auto;
+}
+#group #messageForm {
+    width: 80vw;
+    height: 50px;
+    position: absolute;
+    bottom: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 25px;
+}
+#group #messageForm textarea {
+    width: 50vw;
+    height: 30px;
+    resize: none;
+    padding: 5px 10px;
+    border: none;
+    outline: none;
+    background-color: rgba(200, 200, 200);
+}
+#group #messageForm input[type="submit"] {
+    width: 100px;
+    height: 30px;
+    border: none;
+    outline: none;
+}

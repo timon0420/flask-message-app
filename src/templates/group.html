@@ -1,19 +1,26 @@
 {% extends 'base.html' %}
 {% block head %}
     <title>Group</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/group.css') }}">
 {% endblock %}
 {% block body %}
-    <ul>
-        {% for id in messages_id %}
-            <li>
-                {{ Message.query.get(id).content }}
-                {{ User.query.get(Message.query.get(id).author).name }}
-            </li>
-        {% endfor %}
-    </ul>
-    <form action="/group/{{ group_id }}", method="post">
-        {{ form.csrf_token }}
-        {{ form.content }}
-        {{ form.submit }}
-    </form>
+    <section id="group">
+        {% if messages_id|length > 0 %}
+            <ul>
+                {% for id in messages_id %}
+                    <li>
+                        {{ Message.query.get(id).content }}
+                        {{ User.query.get(Message.query.get(id).author).name }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No messages found.</p>
+        {% endif %}
+        <form action="/group/{{ group_id }}" method="post" id="messageForm">
+            {{ form.csrf_token }}
+            {{ form.content }}
+            {{ form.submit }}
+        </form>
+    </section>
 {% endblock %}
