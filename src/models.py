@@ -19,7 +19,7 @@ class User(db.Model, UserMixin):
 
 class Group_participants(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    group_id = db.Column(db.Integer, db.ForeignKey("group.id"), nullable=False)
+    group_id = db.Column(db.Integer, db.ForeignKey("group.id", ondelete='CASCADE'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
 
     def __init__(self, group_id, user_id):
@@ -41,7 +41,7 @@ class Group(db.Model):
 
 class Message_in_group(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    group_id = db.Column(db.Integer, db.ForeignKey("group.id"))
+    group_id = db.Column(db.Integer, db.ForeignKey("group.id", ondelete='CASCADE'))
     message_id = db.Column(db.Integer, db.ForeignKey("message.id"))
 
     def __init__(self, group_id, message_id):

@@ -93,3 +93,22 @@ def group(id):
 
     messages_id = [message.message_id for message in Message_in_group.query.filter_by(group_id=id).all()]
     return render_template('group.html', group_id=id, messages_id=messages_id, Message=Message, User=User, form=form)
+
+@app.route('/group/<id>/options', methods=['GET', 'POST'])
+@login_required
+def group_options(id):
+    return render_template('groupOptions.html', group_id=id, Group=Group)
+
+@app.route('/group/<id>/delete', methods=['GET', 'POST'])
+@login_required
+def group_delete(id):
+
+    group = Group.query.get(id)
+
+    try:
+        db.session.delete(group)
+        db.session.commit()
+    except Exception as e:
+        return str(e)
+    
+    return redirect('/profile')

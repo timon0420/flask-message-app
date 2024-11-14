@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block head %}
+    <title>{{ Group.query.get(group_id).group_name }}</title>
+{% endblock %}
+{% block body %}
+    <section id="groupOptions">
+        <a href="/group/{{ group_id }}/delete">Delete Group</a>
+    </section>
+{% endblock %}
