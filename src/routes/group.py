@@ -1,7 +1,7 @@
 from src import app, db, bcrypt
 from flask import render_template, redirect, url_for
 from flask_login import current_user, login_required
-from src.models import User, Group_participants, Group, Message_in_group, Message
+from src.models import User, Group_participants, Group, Message_in_group, Message, Waiting_to_be_added
 from src.form import CreateGroupForm, JoinGroupForm, MessageForm, GroupForm
 
 @app.route('/profile', methods=['POST', 'GET'])
@@ -38,20 +38,17 @@ def profile():
         
     if formJoin.identifier.data == 'FORMJOIN' and form.validate_on_submit():
 
-        print("działa")
         group_name = formJoin.group_name.data
         code = formJoin.code.data
 
         existing_group = Group.query.filter_by(group_name=group_name).all()
 
-        print(existing_group)
-
         for group in existing_group:
             if bcrypt.check_password_hash(group.code, code):
-                add_user_to_group = Group_participants(group_id=group.id, user_id=current_user.id)
+                add_user_to_waiting_to_be_added = Waiting_to_be_added(user_id=current_user.id, group_id=group.id)
 
                 try:
-                    db.session.add(add_user_to_group)
+                    db.session.add(add_user_to_waiting_to_be_added)
                     db.session.commit()
                 except Exception as e:
                     return str(e)

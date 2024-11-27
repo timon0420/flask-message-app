@@ -10,6 +10,7 @@ class User(db.Model, UserMixin):
     message = db.relationship("Message", backref="user", cascade="all, delete")
     group_participants = db.relationship("Group_participants", backref="user", cascade="all, delete")
     group = db.relationship("Group", backref="user", cascade="all, delete")
+    waiting_to_be_added = db.relationship("Waiting_to_be_added", backref="user")
 
     def __init__(self, name, surname, email, password):
         self.name = name
@@ -33,6 +34,7 @@ class Group(db.Model):
     admin = db.Column(db.Integer, db.ForeignKey("user.id", ondelete='CASCADE'), nullable=False)
     group_participants = db.relationship("Group_participants", backref="group", cascade="all, delete")
     message_in_group = db.relationship("Message_in_group", backref="group", cascade="all, delete")
+    waiting_to_be_added = db.relationship("Waiting_to_be_added", backref="group")
 
     def __init__(self, group_name, code, admin):
         self.group_name = group_name
@@ -57,3 +59,12 @@ class Message(db.Model):
     def __init__(self, content, author):
         self.content = content
         self.author = author
+
+class Waiting_to_be_added(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    group_id = db.Column(db.Integer, db.ForeignKey("group.id"))
+
+    def __init__(self, user_id, group_id):
+        self.user_id = user_id
+        self.group_id = group_id
