@@ -1,7 +1,7 @@
 from src import app, db, bcrypt
 from flask import render_template, redirect, url_for
 from flask_login import current_user, login_required
-from src.models import User, Group_participants, Group, Message_in_group, Message, Waiting_to_be_added
+from src.models import User, Group_participants, Group, Message_in_group, Message
 from src.form import CreateGroupForm, JoinGroupForm, MessageForm, GroupForm
 
 @app.route('/profile', methods=['POST', 'GET'])
@@ -10,7 +10,6 @@ def profile():
     formCreate = CreateGroupForm()
     formJoin = JoinGroupForm()
     form = GroupForm()
-    print(form.validate_on_submit())
 
     if formCreate.identifier.data == 'FORMCREATE' and form.validate_on_submit():
 
@@ -29,7 +28,7 @@ def profile():
         except Exception as e:
             return str(e)
         
-        add_user_to_group = Group_participants(group_id=new_group.id, user_id=current_user.id)
+        add_user_to_group = Group_participants(group_id=new_group.id, user_id=current_user.id, participant=True)
         try:
             db.session.add(add_user_to_group)
             db.session.commit()
@@ -45,16 +44,15 @@ def profile():
 
         for group in existing_group:
             if bcrypt.check_password_hash(group.code, code):
-                add_user_to_waiting_to_be_added = Waiting_to_be_added(user_id=current_user.id, group_id=group.id)
+                add_new_user = Group_participants(group_id=group.id, user_id=current_user.id, participant=False)
 
-                try:
-                    db.session.add(add_user_to_waiting_to_be_added)
-                    db.session.commit()
-                except Exception as e:
-                    return str(e)
-                break
+        try:
+            db.session.add(add_new_user)
+            db.session.commit()
+        except Exception as e:
+            return str(e)
 
-    groups = Group_participants.query.filter_by(user_id=current_user.id).all()
+    groups = Group_participants.query.filter_by(user_id=current_user.id, participant=True).all()
 
     return render_template('profile.html', user=current_user, formCreate=formCreate, formJoin=formJoin, groups=groups, Group=Group)
 
@@ -94,7 +92,8 @@ def group(id):
 @app.route('/group/<id>/options', methods=['GET', 'POST'])
 @login_required
 def group_options(id):
-    return render_template('groupOptions.html', group_id=id, Group=Group)
+    participants = Group_participants.query.filter_by(group_id=id, participant=False).all()
+    return render_template('groupOptions.html', group_id=id, Group=Group, users=participants, User=User)
 
 @app.route('/group/<id>/delete', methods=['GET', 'POST'])
 @login_required
@@ -109,3 +108,20 @@ def group_delete(id):
         return str(e)
     
     return redirect('/profile')
+
+@app.route('/group/group=<group_id>/user=<user_id>/add_user', methods=['GET', 'POST'])
+@login_required
+def add_user(group_id, user_id):
+
+    add_user_to_group = Group_participants.query.filter_by(user_id=user_id, group_id=group_id).first()
+    
+    if add_user_to_group:
+        add_user_to_group.participant = True
+        try:
+            db.session.commit()
+        except Exception as e:
+            return str(e)
+    else:
+        return "Sorry something went wrong. Please try again"
+    
+    return redirect(f"/group/{group_id}/options")

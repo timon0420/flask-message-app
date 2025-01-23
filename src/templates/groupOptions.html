@@ -5,5 +5,17 @@
 {% block body %}
     <section id="groupOptions">
         <a href="/group/{{ group_id }}/delete">Delete Group</a>
+        <h2>These users want to be in your group</h2>
+        <ul>
+            {% for user in users %}
+                <li>
+                    <div>
+                        <p>Name: {{ User.query.get(user.user_id).name }}</p>
+                        <p>Surname: {{ User.query.get(user.user_id).surname }}</p>
+                        <a href="/group/group={{group_id}}/user={{user.user_id}}/add_user">Add User</a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
     </section>
 {% endblock %}

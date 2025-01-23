@@ -21,14 +21,14 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField("Register")
 
     def validate_user(self):
-        email_pattern = "[\w]{2,40}@((gmail)|(interia)|(wp)|(onet)|(o2)){1}.((com)|(pl))"
-        name_surname_pattern = "[A-Z]{1}[a-zęążź]{2,19}"
-        password_pattern = "[\w\-._!@#$%^&*]{5,20}"
-        email_match = re.match(email_pattern, self.email.data)
-        name_match = re.match(name_surname_pattern, self.name.data)
-        surname_match = re.match(name_surname_pattern, self.surname.data)
-        password_match = re.match(password_pattern, self.password.data)
-        if not (email_match and name_match and surname_match and password_match):
+        # email_pattern = "[\w]{2,40}@((gmail)|(interia)|(wp)|(onet)|(o2)){1}.((com)|(pl))"
+        # name_surname_pattern = "[A-Z]{1}[a-zęążź]{2,19}"
+        # password_pattern = "[\w\-._!@#$%^&*]{5,20}"
+        # email_match = re.match(email_pattern, self.email.data)
+        # name_match = re.match(name_surname_pattern, self.name.data)
+        # surname_match = re.match(name_surname_pattern, self.surname.data)
+        # password_match = re.match(password_pattern, self.password.data)
+        if not (self.name and self.surname and self.email and self.password):
             raise ValidationError (
                 "ERROR"
             )
