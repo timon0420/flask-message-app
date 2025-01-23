@@ -37,6 +37,8 @@
                         <a href="/group/{{ group.group_id }}">Open group</a>
                         {% if Group.query.filter_by(id=group.group_id).first().admin == user.id %}
                             <a href="/group/{{ group.group_id }}/options">Group Options</a>
+                        {% else if Group.query.filter_by(id=group.group_id).first().admin != user.id %}
+                            <a href="/group/{{ group.group_id }}/leave"></a>
                         {% endif %}
                     </td>
                 </tr>
