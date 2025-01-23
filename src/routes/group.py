@@ -44,7 +44,10 @@ def profile():
 
         for group in existing_group:
             if bcrypt.check_password_hash(group.code, code):
-                add_new_user = Group_participants(group_id=group.id, user_id=current_user.id, participant=False)
+                if not Group_participants.query.filter_by(group_id=group.id, user_id=current_user.id).first():
+                    add_new_user = Group_participants(group_id=group.id, user_id=current_user.id, participant=False)
+                else:
+                    return "You are already in this group"
 
         try:
             db.session.add(add_new_user)
@@ -125,3 +128,19 @@ def add_user(group_id, user_id):
         return "Sorry something went wrong. Please try again"
     
     return redirect(f"/group/{group_id}/options")
+
+@app.route("/group/<group_id>/leave", methods=['GET', 'POST'])
+@login_required
+def leave_group(group_id):
+    leave = Group_participants.query.filter_by(user_id=current_user.id, group_id=group_id).first()
+    try:
+        db.session.delete(leave)
+        db.session.commit()
+    except Exception as e:
+        return str(e)
+    return redirect('/profile')
+@app.route("/group/<group_id>/statics", methods=['GET', 'POST'])
+@login_required
+def statics(group_id):
+    users = Group_participants.query.filter_by(group_id=group_id, participant=True).all()
+    return render_template('statics.html', users=[user.user_id for user in users], User=User, group_id=group_id)

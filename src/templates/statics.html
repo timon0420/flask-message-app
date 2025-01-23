@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block head %}
+    <title>Statics</title>
+{% endblock %}
+{% block body %}
+    <a href="/group/{{ group_id }}">Back</a>
+    <h1>Statics</h1>
+    <h2>Participants</h2>
+    <ul>
+        {% for user in users %}
+            <li>
+                <ol>
+                    <li>Name: {{ User.query.get(user).name }}</li>
+                    <li>Surname: {{ User.query.get(user).surname }}</li>
+                </ol>
+            </li>
+        {% endfor %}
+        <li>Number of participants: {{ users|length }}</li>
+    </ul>
+{% endblock %}
